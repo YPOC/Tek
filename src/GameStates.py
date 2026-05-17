@@ -184,14 +184,15 @@ class EndState(GameState):
 
 
     def execute(self) -> GameState | None:
+        logging.info("============================")
         if self.game.round_winner:
-            print(f"Round Winner: {self.game.round_winner.name}")
+            logging.info(f"Round Winner: {self.game.round_winner.name}")
         else:
-            print("The round ended but there was no winner.")
+            logging.info("The round ended but there was no winner.")
         for player in self.game.players:
             points = player.tally_points()
             player.add_points_to_score(points)
-            print(f"{player.name} - Points: {player.score}")
+            logging.info(f"{player.name} - Points: {player.score}")
 
         # End the round
         return None
