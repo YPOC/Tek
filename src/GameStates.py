@@ -45,8 +45,21 @@ class CardPlayingState(GameState):
                 return EffectState(self.game, card_played)
 
         elif not self.allow_pass:
-            # if no card is played transition to drawing
+            # if no card is played
+            # check for a stale game
+            if (
+                self.game.stack.size == 0
+                and all(
+                    len(self.game.legal_moves(other_player, self.game.get_previous_card())) == 0
+                    for other_player in self.game.players
+                )
+            ):
+                logging.debug("No player has any more legal moves available.")
+                return EndState(self.game)
+
+            # transition to drawing
             return DrawingState(self.game)
+
 
         # Transition to next player
         self.game.advance_play()
