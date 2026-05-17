@@ -1,3 +1,5 @@
+import logging
+
 from .Card import Card, Rank, Suit, BackColor
 from .Deck import Deck
 from .Stack import Stack
@@ -92,3 +94,8 @@ class Game:
             # print(f"Round Winner: {self.round_winner.name}")
             # for player in self.players:
             #     print(f"{player.name} - Points: {player.score}")
+
+        logging.info("Final scores:")
+        for player in self.players:
+            logging.info(f"{player.name} - Points: {player.score}")
+        logging.info("=====================")
