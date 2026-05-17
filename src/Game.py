@@ -5,14 +5,16 @@ from .Player import Player
 from .GameStates import PlayingState
 
 class Game:
+    round_winner: Player | None
+
     def __init__(self, players: list[Player]):
         self.players = players
-        self.round_winner: Player | None = None
 
 
     def setup_round(self):
         self.current_player_index = 0
         self.direction = 1
+        self.round_winner = None
         self.stack = Stack([Deck(BackColor.BLUE), Deck(BackColor.RED)])
         self.stack.shuffle()
         self.discard_pile: list[Card] = []
