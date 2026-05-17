@@ -189,7 +189,8 @@ class EndState(GameState):
         else:
             print("The round ended but there was no winner.")
         for player in self.game.players:
-            player.tally_points()
+            points = player.tally_points()
+            player.add_points_to_score(points)
             print(f"{player.name} - Points: {player.score}")
 
         # End the round
