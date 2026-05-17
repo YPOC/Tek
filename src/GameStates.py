@@ -1,8 +1,12 @@
 from abc import ABC, abstractmethod
 import logging
+from typing import TYPE_CHECKING
+
 from .Card import Card, Rank, Suit
 from .Player import Player
-from .Game import Game
+
+if TYPE_CHECKING:
+    from .Game import Game
 
 
 class GameState(ABC):
