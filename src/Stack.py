@@ -1,7 +1,8 @@
 from collections import deque
+
 from .Card import Card
 from .Deck import Deck, BackColor
-from .ShufflingStrategy import RandomShufflingStrategy
+from .ShufflingStrategy import ShufflingStrategy, RandomShufflingStrategy
 
 
 class TooFewCardsError(Exception):
@@ -12,19 +13,18 @@ class Stack():
     def __init__(
             self,
             decks: list[Deck],
-            shuffling_strategy = RandomShufflingStrategy
+            shuffling_strategy: type[ShufflingStrategy] = RandomShufflingStrategy
         ) -> None:
-        # self.cards: deque = self.generate_stack(*decks)
-        self.cards: deque = self.generate_stack(*decks)
+        self.cards: deque[Card] = self.generate_stack(*decks)
         self._shuffling_strategy = shuffling_strategy
 
-    def generate_stack(self, *args: Deck) -> deque:
-        cards = deque()
+    def generate_stack(self, *args: Deck) -> deque[Card]:
+        cards: deque[Card] = deque()
         for deck in args:
             cards.extend(deck.cards)
         return cards
 
-    def shuffle(self, strategy: RandomShufflingStrategy = None) -> None:
+    def shuffle(self, strategy: ShufflingStrategy | None = None) -> None:
         if strategy is not None:
             strategy.shuffle(self.cards)
         else:
@@ -34,7 +34,7 @@ class Stack():
         if len(self.cards) == 0:
             raise TooFewCardsError("You're trying to draw more cards than what is available")
         return self.cards.popleft()
-    
+
     # def draw_multiple(self, n_cards) -> list[Card]:
     #     if n_cards > len(self.cards):
     #         raise TooFewCardsError("You're trying to draw more cards than what is available")
@@ -42,7 +42,7 @@ class Stack():
     #     self.cards = self.cards[n_cards:]
     #     return cards
 
-    def cut(at: int):
+    def cut(self, at: int) -> None:
         raise NotImplementedError()
         # It should be possible to cut the deck in two parts such that you can peek at the lowest card
         # of the upper part and draw up to 7 significant cards

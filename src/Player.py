@@ -4,9 +4,9 @@ from .PlayerStrategy import PlayerStrategy
 
 
 class Player():
-    def __init__(self, name, strategy):
+    def __init__(self, name: str, strategy: type[PlayerStrategy]):
         self.name: str = name
-        self.strategy: PlayerStrategy = strategy
+        self.strategy: type[PlayerStrategy] = strategy
         self.score: int = 0
         self.hand: list[Card] = []
         self.n_plays_to_skip: int = 0
@@ -16,7 +16,7 @@ class Player():
         return self.name
 
 
-    def draw_card(self, stack: Stack) -> None:
+    def draw_card(self, stack: Stack) -> Card | None:
         try:
             card = stack.draw()
             self.hand.append(card)
@@ -25,7 +25,7 @@ class Player():
             self.n_plays_to_skip += 1
 
 
-    def play_card(self, previous_card: Card, legal_moves: list[Card]) -> Card:
+    def play_card(self, previous_card: Card | None, legal_moves: list[Card]) -> Card | None:
         if legal_moves:
             return self.strategy.play(hand=self.hand, top_card=previous_card, legal_moves=legal_moves)
         return None
@@ -40,4 +40,8 @@ class Player():
 
 
     def tally_points(self) -> int:
-        self.score += sum(card.value for card in self.hand)
+        return sum(card.value for card in self.hand)
+
+
+    def add_points_to_score(self, points: int) -> None:
+        self.score += points

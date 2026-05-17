@@ -38,7 +38,7 @@ class BackColor(Enum):
 class Card():
     suit: Suit
     rank: Rank
-    back: BackColor = None
+    back: BackColor | None = None
 
     def __repr__(self) -> str:
         if self.suit == Suit.JOKER:

@@ -7,7 +7,7 @@ from .GameStates import PlayingState
 class Game:
     def __init__(self, players: list[Player]):
         self.players = players
-        self.round_winner: Player = None
+        self.round_winner: Player | None = None
 
 
     def setup_round(self):
@@ -15,8 +15,8 @@ class Game:
         self.direction = 1
         self.stack = Stack([Deck(BackColor.BLUE), Deck(BackColor.RED)])
         self.stack.shuffle()
-        self.discard_pile = []
-        self.discard_pile.append(self.stack.draw()) # TODO: Remove
+        self.discard_pile: list[Card] = []
+        self.discard_pile.append(self.stack.draw()) # TODO: Remove; To begin, the discard pile should be empty.
         for player in self.players: # TODO: Add cutting of cards and drawing special cards + clubs
             player.hand.clear()
             for _ in range(7):
@@ -35,15 +35,21 @@ class Game:
         return [p for p in self.players if p is not player]
 
 
-    def get_previous_card(self) -> Card:
+    def get_previous_card(self) -> Card | None:
         return self.discard_pile[-1] if self.discard_pile else None
 
 
-    def legal_moves(self, player: Player, previous_card: Card):
+    def legal_moves(self, player: Player, previous_card: Card | None):
         return [card for card in player.hand if self.is_legal_play(card, previous_card)]
 
 
-    def is_legal_play(self, card: Card, previous_card: Card) -> bool:
+    def is_legal_play(self, card: Card, previous_card: Card | None) -> bool:
+        if previous_card is None:
+            return any([
+                card.suit is Suit.CLUBS,
+                card.suit is Suit.JOKER,
+                card.rank is Rank.JACK,
+            ])
         if card.suit is Suit.JOKER:
             return True
         if card.suit is previous_card.suit or card.rank is previous_card.rank:

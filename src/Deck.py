@@ -7,8 +7,8 @@ class Deck():
         self.back_color = back_color
         self.cards: deque[Card] = self.generate_deck(back_color)
 
-    def generate_deck(self, back_color) -> deque[Card]:
-        cards = deque()
+    def generate_deck(self, back_color: BackColor) -> deque[Card]:
+        cards: deque[Card] = deque()
         for suit in Suit:
             for rank in Rank:
                 card = Card(suit=suit, rank=rank, back=back_color)
